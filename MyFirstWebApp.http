@@ -1,0 +1,46 @@
+@MyFirstWebApp_HostAddress = http://localhost:5241
+
+### GET All Todos
+GET {{MyFirstWebApp_HostAddress}}/api/todos
+Accept: application/json
+
+###
+
+### GET a Todo by ID
+GET {{MyFirstWebApp_HostAddress}}/api/todos/1
+Accept: application/json
+
+###
+
+### POST a New Todo
+POST {{MyFirstWebApp_HostAddress}}/api/todos
+Accept: application/json
+Content-Type: application/json
+
+{
+  "title": "Write API Documentation", 
+  "isDone": false,
+  "dueAt": "2021-12-31T23:59:59",
+  "priority": 1
+}
+
+
+###
+
+### PUT (Update) an Existing Todo
+PUT {{MyFirstWebApp_HostAddress}}/api/todos/1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "id": 3,
+    "Title": "Write API Documentation",
+    "IsDone": false
+  }
+
+
+###
+
+### DELETE a Todo by ID
+DELETE {{MyFirstWebApp_HostAddress}}/api/todos/1
+Accept: application/json
