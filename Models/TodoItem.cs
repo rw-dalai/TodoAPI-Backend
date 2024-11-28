@@ -19,6 +19,7 @@ public class TodoItem : BaseEntity<int>
     // Constructor for `TodoController_Testing` where we set the id manually
     public TodoItem(int id, string title, bool isDone, DateTime dueAt, Priority priority)
     {
+        Id = id;
         Title = title;
         IsDone = isDone;
         DueAt = dueAt;
