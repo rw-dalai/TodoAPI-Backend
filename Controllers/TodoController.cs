@@ -125,6 +125,7 @@ public class TodoController(TodoContext db) : ControllerBase
 
         // 3. Remove the TodoItem from the database
         db.TodoItems.Remove(todo);
+        db.SaveChanges();
         
         // 4. Return 204 No Content status code
         return NoContent();
