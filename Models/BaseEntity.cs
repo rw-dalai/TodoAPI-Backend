@@ -17,6 +17,8 @@ namespace MyFirstWebApp.Models;
 // What is Identity?
 //   Identity is a unique identifier that distinguishes an entity from other entities.
 
+// All our entities will inherit from this class.
+//   This class will have an Id property that will be used as the primary key in the database.
 public abstract class BaseEntity<T>() where T : struct
 {
     // EF Core uses the Id property as the primary key by convention.
