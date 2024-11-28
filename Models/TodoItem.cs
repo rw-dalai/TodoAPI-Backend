@@ -1,5 +1,12 @@
 namespace MyFirstWebApp.Models;
 
+// What is a Domain?
+//   A domain is the subject area that the software is built to address.
+
+// TodoItem is an Entity in the Domain Model
+//   It represents a task that needs to be done from the real world.
+
+
 public class TodoItem : BaseEntity<int>
 {
     public string Title { get; set; }
