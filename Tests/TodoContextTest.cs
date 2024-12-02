@@ -7,12 +7,11 @@ using Microsoft.Data.Sqlite;
 namespace MyFirstWebApp.Tests;
 
 // NugGet Packages
-//   - Microsoft.EntityFrameworkCore.Sqlite
 //   - Microsoft.Net.Test.Sdk
 //   - Xunit
 
-// Unit Tests Naming Conventions
-//   Should_ExpectedBehavior_When_StateUnderTest
+// Test Naming Convention
+//  Should_[ExpectedBehavior]_When_[TestCondition]
 
 // Examples
 //   Should_ThrowException_When_AgeLessThan18
@@ -34,18 +33,32 @@ public class TodoContextTest
             .LogTo(Console.WriteLine)
             .Options;
         
-        
-        // Ensure the Database is created and seeded
+        // Create the DbContext
         var db = new TodoContext(options);
+
+        // Start with empty test database
         db.Database.EnsureDeleted();
         db.Database.EnsureCreated();
+        
+        // Seed for testing
         db.Seed();
         
         // Return the Database Context
         return db;
     }
+    
+    
+    // Database Schema Tests ----------------------------------------------------------
+    [Fact]
+    public void Should_CreateDatabaseSchema()
+    {
+        // This test verifies that our database schema can be created.
+        // If there are any issues with our entity configurations, this will fail.
+        CreateContext();
+    }
 
     
+    // TodoItem Tests ----------------------------------------------------------
     [Fact]
     public void Should_AddTodoItem_When_SavingToDatabase()
     {

@@ -3,6 +3,10 @@ using MyFirstWebApp.Models;
 
 namespace MyFirstWebApp.Infrastructure;
 
+// Nuget Packages
+//   - Microsoft.EntityFrameworkCore
+//   - Microsoft.EntityFrameworkCore.Sqlite
+
 // What is a DbContext?
 //  A DbContext is a class that represents a session with the database and allows us to query and save instances of entities.
 public class TodoContext(DbContextOptions<TodoContext> options) : DbContext(options)
