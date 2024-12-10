@@ -29,9 +29,11 @@ namespace MyFirstWebApp.Controllers;
 //  404 Not Found             - The requested resource was not found
 //  500 Internal Server Error - An unexpected error occurred
 
+// [FromBody]  ?? Rearch this annotation
+
 
 // [ApiController]
-// [Route("api/todos")]
+// [Route("/api/todos")]
 public class TodoController_TestingOnly : ControllerBase
 {
     // In-memory database for demonstration purposes
@@ -44,7 +46,7 @@ public class TodoController_TestingOnly : ControllerBase
     
     
     
-    // GET /api/todos -- Get all TodoItems
+    // HTTP GET /api/todos -- Get all TodoItems
     [HttpGet]
     public IActionResult GetAllTodos()
     {
@@ -54,13 +56,12 @@ public class TodoController_TestingOnly : ControllerBase
     
     
     
-    // HTTP GET /api/todos/{id}
+    // HTTP GET /api/todos/{id} -- Get a TodoItem by Id
     [HttpGet("{id:int}")]
     public IActionResult GetTodoById(int id)
     {
         // 1. Find the TodoItem with the specified Id
         var todo = _todoItems.FirstOrDefault(t => t.Id == id);
-        
         if (todo == null)
         {
             // 2. Return 404 Not Found status code if the TodoItem is not found
@@ -72,10 +73,10 @@ public class TodoController_TestingOnly : ControllerBase
     }
     
     
-    
+    // Http Body has the TotoItem properties
     // HTTP POST /api/todos
     [HttpPost]
-    public IActionResult CreateTodo(AddTodoTaskCommand newTodo)
+    public IActionResult CreateTodo([FromBody] AddTodoTaskCommand newTodo)
     {
         // 1. Generate a new Id for the TodoItem by incrementing the maximum Id
         var newId = _todoItems.Any() ? _todoItems.Max(t => t.Id) + 1 : 1;
@@ -85,14 +86,15 @@ public class TodoController_TestingOnly : ControllerBase
         _todoItems.Add(todoItem);
         
         // 3. Return a 201 Created status code with the new TodoItem
-        return CreatedAtAction(nameof(GetTodoById), new { id = todoItem.Id }, newTodo);
+        // Location: http://localhost:5241/api/todos/4
+        return CreatedAtAction(nameof(GetTodoById), new { id = todoItem.Id }, todoItem);
     }
 
     
     
     // HTTP PUT /api/todos/{id}
     [HttpPut("{id}")]
-    public IActionResult UpdateTodo(int id, AddTodoTaskCommand updatedTodo)
+    public IActionResult UpdateTodo(int id, [FromBody] AddTodoTaskCommand updatedTodo)
     {
         // 1. Find an existing TodoItem with the specified Id
         var todo = _todoItems.FirstOrDefault(t => t.Id == id);

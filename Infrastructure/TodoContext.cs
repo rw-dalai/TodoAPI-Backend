@@ -30,14 +30,14 @@ public class TodoContext(DbContextOptions<TodoContext> options) : DbContext(opti
      //  Seeding a database is the process of populating a database for testing or development purposes.
      public void Seed()
      {
-          var seedTodos = new[]
-          {
-               new TodoItem(1, "Learn React", false, DateTime.Now.AddDays(7), Priority.High),
-               new TodoItem(2, "Learn C#", false, DateTime.Now.AddDays(14), Priority.Medium),
-               new TodoItem(3, "Write Unit Tests", false, DateTime.Now.AddDays(21), Priority.Low)
-          };
+          List<TodoItem> todoItems =
+          [
+               new("Learn React", false, DateTime.Now.AddDays(7), Priority.High),
+               new("Learn C#", false, DateTime.Now.AddDays(14), Priority.Medium),
+               new("Write Unit Tests", false, DateTime.Now.AddDays(21), Priority.Low)
+          ];
 
-          TodoItems.AddRange(seedTodos);
+          TodoItems.AddRange(todoItems);
           SaveChanges();
      }
 }

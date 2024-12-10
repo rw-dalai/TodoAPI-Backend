@@ -14,6 +14,11 @@ namespace MyFirstWebApp.Controllers;
 // What is a Route?
 //   A Route is a URL pattern that is used to match an incoming request to a controller action.
 
+// HTTP Request consists of 3 parts:
+// 1. Request Line          // e.g. HTTP POST /api/todos
+// 2. Request Headers       // e.g. Content-Type: application/json
+// 3. Request Body          // e.g. JSON Data
+
 // TodoAPI Endpoints:
 //  GET /api/todos            - Get all TodoItems
 //  GET /api/todos/{id}       - Get a TodoItem by Id
@@ -21,14 +26,14 @@ namespace MyFirstWebApp.Controllers;
 //  PUT /api/todos/{id}       - Update a TodoItem
 //  DELETE /api/todos/{id}    - Delete a TodoItem
 
-// Status Codes are divided into 5 categories
+// Status Codes are divided into 5 categories:
 //  100-199 - Informational
 //  200-299 - Success
 //  300-399 - Redirection
 //  400-499 - Client Error
 //  500-599 - Server Error
 
-// Important Status Codes
+// Important Status Codes:
 //  200 OK                    - The request was successful, e.g. get all TodoItems
 //  201 Created               - The request was successful, a new resource was created, e.g. create a new TodoItem
 //  204 No Content            - The request was successful, there is no content to return, e.g. delete a TodoItem
@@ -37,13 +42,13 @@ namespace MyFirstWebApp.Controllers;
 //  404 Not Found             - The requested resource was not found, e.g. invalid id of the resource
 //  500 Internal Server Error - An unexpected error occurred, e.g. database connection failed, Server Unavailable, etc.
 
-
 [ApiController]
 [Route("api/todos")]
 public class TodoController(TodoContext db) : ControllerBase
 {
     
     // GET /api/todos
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpGet]
     public IActionResult GetAllTodos()
     {
@@ -57,8 +62,10 @@ public class TodoController(TodoContext db) : ControllerBase
     
     
     // HTTP GET /api/todos/{id}
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("{id:int}")]
-    public IActionResult GetTodoById(int id)
+    public IActionResult GetTodoById([FromRoute] int id)
     {
         // 1. Find the TodoItem by its primary key form the DBSet Database context
         var todo = db.TodoItems.Find(id);
@@ -73,10 +80,10 @@ public class TodoController(TodoContext db) : ControllerBase
     }
     
     
-    
     // HTTP POST /api/todos
+    [ProducesResponseType(StatusCodes.Status201Created)]
     [HttpPost]
-    public IActionResult CreateTodo(AddTodoTaskCommand newTodo)
+    public IActionResult CreateTodo([FromBody] AddTodoTaskCommand newTodo)
     {
         // 1. Create a new TodoItem
         var todoItem = new TodoItem(newTodo.Title, newTodo.IsDone, newTodo.DueAt, newTodo.Priority);
@@ -86,14 +93,16 @@ public class TodoController(TodoContext db) : ControllerBase
         db.SaveChanges();
         
         // 3. Return (201 Created) status code and the new TodoItem
-        return CreatedAtAction(nameof(GetTodoById), new { id = todoItem.Id }, newTodo);
+        return CreatedAtAction(nameof(GetTodoById), new { id = todoItem.Id }, todoItem);
     }
 
     
     
     // HTTP PUT /api/todos/{id}
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPut("{id:int}")]
-    public IActionResult UpdateTodo(int id, AddTodoTaskCommand updatedTodo)
+    public IActionResult UpdateTodo([FromRoute] int id, [FromBody] AddTodoTaskCommand updatedTodo)
     {
         // 1. Find the TodoItem by its primary key from the DB
         var todo = db.TodoItems.Find(id);
@@ -117,8 +126,10 @@ public class TodoController(TodoContext db) : ControllerBase
     
     
     // DELETE /api/todos/{id}
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpDelete("{id:int}")]
-    public IActionResult DeleteTodoById(int id)
+    public IActionResult DeleteTodoById([FromRoute] int id)
     {
         // 1. Find the TodoItem by its primary key form the DB
         var todo = db.TodoItems.Find(id);
